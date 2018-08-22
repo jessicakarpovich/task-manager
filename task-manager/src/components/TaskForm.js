@@ -61,6 +61,7 @@ class TaskForm extends Component {
         };
         // send validated task to parent
         this.props.addTask(task);
+        console.log("all good");
         // toggle form
         this.props.toggleForm();
     }
@@ -96,7 +97,7 @@ class TaskForm extends Component {
                     </div>
                     <div className="form-group d-flex justify-content-between">
                         <button className="btn btn-danger my-2" onClick={this.props.toggleForm}>Cancel</button>
-                        <button className="btn btn-primary my-2" type="submit" onClick={this.addTask}>Save</button>
+                        <button className="btn btn-primary my-2" onClick={this.addTask}>Save</button>
                     </div>
                 </form>
             </div>

@@ -20,6 +20,7 @@ class  MainContainer extends Component {
         this.toggleForm = this.toggleForm.bind(this);
         this.addTask = this.addTask.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
     }
 
     componentDidMount() {
@@ -50,6 +51,13 @@ class  MainContainer extends Component {
         console.log(this.state.taskList);
         localStorage.setItem('taskList', JSON.stringify(this.state.taskList));
     }
+    
+    deleteTask(key) {
+        let list = this.state.taskList;
+        this.state.taskList.splice(key, 1);
+        this.setState({ taskList: this.state.taskList});
+        localStorage.setItem('taskList', JSON.stringify(list));
+    }
 
     handleSelect(activeKey) {
         this.setState({ activeKey });
@@ -58,7 +66,7 @@ class  MainContainer extends Component {
     render() {
         // map list values
         let tasks = this.state.taskList.map((value, key) => {
-            return <MainList value={value} key={key} id={key} />
+            return <MainList value={value} key={key} id={key} del={() => this.deleteTask(key)} />
         })
         
         return (
@@ -75,8 +83,8 @@ class  MainContainer extends Component {
                         <div>{tasks}</div>
                     </div>
                 </div>
-                <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+                <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossOrigin="anonymous"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossOrigin="anonymous"></script>
                 <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.full.min.js"></script>
             </div>
