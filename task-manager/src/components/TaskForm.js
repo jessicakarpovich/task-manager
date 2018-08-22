@@ -67,7 +67,8 @@ class TaskForm extends Component {
     
     render () {
         return (
-            <div className="col-md-6">
+            <div className="col-md-6 my-2">
+                <h2>New Task</h2>
                 <form>
                     <div className="row">
                         <div className="col">
@@ -93,7 +94,10 @@ class TaskForm extends Component {
                             <input type="date" className="form-control" id="due_date" value={this.state.due_date} onChange={(e) => this.handleInputChange(e)}/>
                         </div>
                     </div>
-                    <button className="btn btn-primary my-2" type="submit" onClick={this.addTask}>Save</button>
+                    <div className="form-group d-flex justify-content-between">
+                        <button className="btn btn-danger my-2" onClick={this.props.toggleForm}>Cancel</button>
+                        <button className="btn btn-primary my-2" type="submit" onClick={this.addTask}>Save</button>
+                    </div>
                 </form>
             </div>
         )

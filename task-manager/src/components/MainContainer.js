@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 // import other components
 import Header from './Header';
 import TaskForm from './TaskForm';
+import MainList from './MainList';
 
 
 //import { Route } from "react-roter-dom";
@@ -13,10 +14,12 @@ class  MainContainer extends Component {
         super();
         this.state = {
             showForm: false,
-            taskList: []
+            taskList: [],
+            activeKey: '0'
         }
         this.toggleForm = this.toggleForm.bind(this);
         this.addTask = this.addTask.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
     }
 
     componentDidMount() {
@@ -48,22 +51,34 @@ class  MainContainer extends Component {
         localStorage.setItem('taskList', JSON.stringify(this.state.taskList));
     }
 
+    handleSelect(activeKey) {
+        this.setState({ activeKey });
+    }
+    
     render() {
+        // map list values
+        let tasks = this.state.taskList.map((value, key) => {
+            return <MainList value={value} key={key} id={key} />
+        })
+        
         return (
             <div>
-            <Header/>
+                <Header/>
                 <div className="container">
-                    <h2>Hello</h2>
-                    <div className="row justify-content-center">
+                    <div className="d-flex justify-content-center">
                         { !this.state.showForm &&
-                        <button type="button" className="btn btn-primary" onClick={this.toggleForm}>Add a new task</button>}
+                        <button type="button" className="btn btn-primary my-2 mx-auto" onClick={this.toggleForm}>Add a New Task</button>}
 
                         {this.state.showForm && <TaskForm addTask={this.addTask} toggleForm={this.toggleForm}/>}
                     </div>
+                    <div>
+                        <div>{tasks}</div>
+                    </div>
                 </div>
-                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossOrigin="anonymous"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossOrigin="anonymous"></script>
+                <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
                 <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/reactstrap/6.0.1/reactstrap.full.min.js"></script>
             </div>
         )
     }
