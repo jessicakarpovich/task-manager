@@ -7,6 +7,7 @@ class TaskForm extends Component {
         this.state = {
             name: '',
             hours: 0,
+            priority: 0,
             desc: '',
             start_date: '',
             due_date: ''
@@ -27,9 +28,9 @@ class TaskForm extends Component {
     addTask(e) {
         e.preventDefault();
         
-        // create regex to use for date validation
-        // format yyyy/mm/dd
-        let dateRegex = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+        let added_date = new Date();
+        // get it in yyyy/mm/dd format
+        let temp = added_date.toISOString().slice(0, 10);
         
         // validate user input
         if (this.state.name === undefined || this.state.name.trim() === "") {
@@ -40,28 +41,20 @@ class TaskForm extends Component {
             alert("Please enter the number of hours this task will take.")
             return false;
         }
-        if (this.state.desc === undefined || this.state.desc.trim() === "") {
-            alert("Please enter a description for the task.")
-            return false;
-        }
-        if (!(dateRegex.test(this.state.start_date))) {
-            alert("Please enter a valid start date.");
-            return false;
-        }
-        if (!(dateRegex.test(this.state.due_date)) || this.state.start_date > this.state.due_date) {
-            alert("Please enter a valid due date.");
-            return false;
-        }
+        
+        // keep description, start date and due date optional
+        
         let task = {
             name: this.state.name, 
-            hours: parseInt(this.state.hours), 
-            desc: this.state.desc, start_date: 
-            this.state.start_date, 
+            hours: parseInt(this.state.hours, 10), 
+            priority: parseInt(this.state.priority, 10),
+            desc: this.state.desc, 
+            added_date: temp,
+            start_date: this.state.start_date, 
             due_date: this.state.due_date
         };
         // send validated task to parent
         this.props.addTask(task);
-        console.log("all good");
         // toggle form
         this.props.toggleForm();
     }
@@ -76,9 +69,15 @@ class TaskForm extends Component {
                             <label htmlFor="name" className="col-form-label">Name:</label>
                             <input type="text" className="form-control" id="name" value={this.state.name} onChange={(e) => this.handleInputChange(e)} />
                         </div>
-                        <div className="col">
-                            <label htmlFor="hours" className="col-form-label">Hours:</label>
-                            <input type="number" className="form-control" id="hours" value={this.state.hours} onChange={(e) => this.handleInputChange(e)} />
+                        <div className="d-flex">
+                            <div className="col">
+                                <label htmlFor="hours" className="col-form-label">Hours:</label>
+                                <input type="number" className="form-control" id="hours" value={this.state.hours} onChange={(e) => this.handleInputChange(e)} />
+                            </div>
+                            <div className="col">
+                                <label htmlFor="priority" className="col-form-label">Priority:</label>
+                                <input type="number" className="form-control" id="priority" value={this.state.priority} onChange={(e) => this.handleInputChange(e)} />
+                            </div>
                         </div>
                     </div>
                     <div className="form-group">

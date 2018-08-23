@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import Header from './Header';
 import TaskForm from './TaskForm';
 import MainList from './MainList';
+import Dropdown from './Dropdown';
+import '../main.css';
 
 
 //import { Route } from "react-roter-dom";
@@ -21,6 +23,12 @@ class  MainContainer extends Component {
         this.addTask = this.addTask.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
+        this.filterDateAsc = this.filterDateAsc.bind(this);
+        this.filterDateDesc = this.filterDateDesc.bind(this);
+        this.filterNameAsc = this.filterNameAsc.bind(this);
+        this.filterNameDesc = this.filterNameDesc.bind(this);
+        this.filterPrioAsc = this.filterPrioAsc.bind(this);
+        this.filterPrioDesc = this.filterPrioDesc.bind(this);
     }
 
     componentDidMount() {
@@ -43,7 +51,9 @@ class  MainContainer extends Component {
         this.state.taskList.push({
             name: task.name, 
             hours: task.hours, 
+            priority: task.priority,
             desc: task.desc, 
+            added_date: task.added_date,
             start_date: task.start_date,
             due_date: task.due_date
         });
@@ -63,6 +73,91 @@ class  MainContainer extends Component {
         this.setState({ activeKey });
     }
     
+    filterDateAsc() {
+        // filter for due date, oldest first
+        let list = this.state.taskList;
+        for (let i = 0; i < list.length; i++) {
+            for (let j = i+1; j < list.length; j++) {
+                if (list[i].due_date > list[j].due_date) {
+                    let temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+        this.setState({ taskList: list });
+    }
+    filterDateDesc() {
+        // filter for due date, oldest first
+        let list = this.state.taskList;
+        for (let i = 0; i < list.length; i++) {
+            for (let j = i+1; j < list.length; j++) {
+                if (list[i].due_date < list[j].due_date) {
+                    let temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+        this.setState({ taskList: list });
+    }
+    filterNameAsc() {
+        // filter for due date, oldest first
+        let list = this.state.taskList;
+        for (let i = 0; i < list.length; i++) {
+            for (let j = i+1; j < list.length; j++) {
+                if (list[i].name > list[j].name) {
+                    let temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+        this.setState({ taskList: list });
+    }
+    filterNameDesc() {
+        // filter for due date, oldest first
+        let list = this.state.taskList;
+        for (let i = 0; i < list.length; i++) {
+            for (let j = i+1; j < list.length; j++) {
+                if (list[i].name < list[j].name) {
+                    let temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+        this.setState({ taskList: list });
+    }
+    filterPrioAsc() {
+        // filter for due date, oldest first
+        let list = this.state.taskList;
+        for (let i = 0; i < list.length; i++) {
+            for (let j = i+1; j < list.length; j++) {
+                if (list[i].priority > list[j].priority) {
+                    let temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+        this.setState({ taskList: list });
+    }
+    filterPrioDesc() {
+        // filter for due date, oldest first
+        let list = this.state.taskList;
+        for (let i = 0; i < list.length; i++) {
+            for (let j = i+1; j < list.length; j++) {
+                if (list[i].priority < list[j].priority) {
+                    let temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+        this.setState({ taskList: list });
+    }
+    
     render() {
         // map list values
         let tasks = this.state.taskList.map((value, key) => {
@@ -75,13 +170,14 @@ class  MainContainer extends Component {
                 <div className="container">
                     <div className="d-flex justify-content-center">
                         { !this.state.showForm &&
-                        <button type="button" className="btn btn-primary my-2 mx-auto" onClick={this.toggleForm}>Add a New Task</button>}
+                        <div>
+                            <button type="button" className="btn btn-primary my-2 mx-auto" onClick={this.toggleForm}>Add a New Task</button>
+                            <Dropdown dateAsc={this.filterDateAsc} dateDesc={this.filterDateDesc} nameAsc={this.filterNameAsc} nameDesc={this.filterNameDesc} prioAsc={this.filterPrioAsc} prioDesc={this.filterPrioDesc} />
+                        </div>}
 
                         {this.state.showForm && <TaskForm addTask={this.addTask} toggleForm={this.toggleForm}/>}
                     </div>
-                    <div>
-                        <div>{tasks}</div>
-                    </div>
+                    <div className="scrollingContent">{tasks}</div>
                 </div>
                 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossOrigin="anonymous"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossOrigin="anonymous"></script>
