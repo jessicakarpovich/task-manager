@@ -21,6 +21,7 @@ class  MainContainer extends Component {
         }
         this.toggleForm = this.toggleForm.bind(this);
         this.addTask = this.addTask.bind(this);
+        this.updateTask = this.updateTask.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
         this.filterDateAsc = this.filterDateAsc.bind(this);
@@ -47,6 +48,7 @@ class  MainContainer extends Component {
         this.setState({showForm: !this.state.showForm});
     }
     
+    // push new task to task array and save in local storage
     addTask(task) {
         this.state.taskList.push({
             name: task.name, 
@@ -58,10 +60,17 @@ class  MainContainer extends Component {
             due_date: task.due_date
         });
         this.setState({ taskList: this.state.taskList });
-        console.log(this.state.taskList);
         localStorage.setItem('taskList', JSON.stringify(this.state.taskList));
     }
     
+    // update task by id
+    updateTask(task, id) {
+        let list = this.state.taskList;
+        list.splice(id, 1, task);
+        this.setState({ taskList: list});
+        localStorage.setItem('taskList', JSON.stringify(list));
+    }
+    // delete task by key
     deleteTask(key) {
         let list = this.state.taskList;
         this.state.taskList.splice(key, 1);
@@ -69,10 +78,13 @@ class  MainContainer extends Component {
         localStorage.setItem('taskList', JSON.stringify(list));
     }
 
+    // handle what option from collapse is selected
     handleSelect(activeKey) {
         this.setState({ activeKey });
     }
-    
+    /***** Filter functions *****/
+    /*** Options: Due Date, Name, and Priority ***/
+    /** Ascending and Descending **/
     filterDateAsc() {
         // filter for due date, oldest first
         let list = this.state.taskList;
@@ -88,7 +100,7 @@ class  MainContainer extends Component {
         this.setState({ taskList: list });
     }
     filterDateDesc() {
-        // filter for due date, oldest first
+        // filter for due date, newest first
         let list = this.state.taskList;
         for (let i = 0; i < list.length; i++) {
             for (let j = i+1; j < list.length; j++) {
@@ -102,7 +114,7 @@ class  MainContainer extends Component {
         this.setState({ taskList: list });
     }
     filterNameAsc() {
-        // filter for due date, oldest first
+        // filter for name, a first
         let list = this.state.taskList;
         for (let i = 0; i < list.length; i++) {
             for (let j = i+1; j < list.length; j++) {
@@ -116,7 +128,7 @@ class  MainContainer extends Component {
         this.setState({ taskList: list });
     }
     filterNameDesc() {
-        // filter for due date, oldest first
+        // filter for name, z first
         let list = this.state.taskList;
         for (let i = 0; i < list.length; i++) {
             for (let j = i+1; j < list.length; j++) {
@@ -130,7 +142,7 @@ class  MainContainer extends Component {
         this.setState({ taskList: list });
     }
     filterPrioAsc() {
-        // filter for due date, oldest first
+        // filter for priority, lowest first
         let list = this.state.taskList;
         for (let i = 0; i < list.length; i++) {
             for (let j = i+1; j < list.length; j++) {
@@ -144,7 +156,7 @@ class  MainContainer extends Component {
         this.setState({ taskList: list });
     }
     filterPrioDesc() {
-        // filter for due date, oldest first
+        // filter for priority, highest first
         let list = this.state.taskList;
         for (let i = 0; i < list.length; i++) {
             for (let j = i+1; j < list.length; j++) {
@@ -161,17 +173,17 @@ class  MainContainer extends Component {
     render() {
         // map list values
         let tasks = this.state.taskList.map((value, key) => {
-            return <MainList value={value} key={key} id={key} del={() => this.deleteTask(key)} />
+            return <MainList value={value} key={key} id={key} del={() => this.deleteTask(key)} updateTask={(e) => this.updateTask(e)}/>
         })
         
         return (
             <div>
                 <Header/>
                 <div className="container">
-                    <div className="d-flex justify-content-center">
+                    <div>
                         { !this.state.showForm &&
-                        <div>
-                            <button type="button" className="btn btn-primary my-2 mx-auto" onClick={this.toggleForm}>Add a New Task</button>
+                        <div className="d-flex justify-content-around">
+                            <button type="button" className="btn btn-primary my-2" onClick={this.toggleForm}>Add a New Task</button>
                             <Dropdown dateAsc={this.filterDateAsc} dateDesc={this.filterDateDesc} nameAsc={this.filterNameAsc} nameDesc={this.filterNameDesc} prioAsc={this.filterPrioAsc} prioDesc={this.filterPrioDesc} />
                         </div>}
 

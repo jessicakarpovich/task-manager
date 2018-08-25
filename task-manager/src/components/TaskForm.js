@@ -14,6 +14,15 @@ class TaskForm extends Component {
         }
         
         this.addTask = this.addTask.bind(this);
+        
+        if (props.values !== undefined) {
+            this.state.name = this.props.values.name;
+            this.state.hours = this.props.values.hours;
+            this.state.priority = this.props.values.priority;
+            this.state.desc = this.props.values.desc;
+            this.state.start_date = this.props.values.start_date;
+            this.state.due_date = this.props.values.due_date;
+        }
     }
     
     // function to handle input change
@@ -62,7 +71,7 @@ class TaskForm extends Component {
     render () {
         return (
             <div className="col-md-6 my-2">
-                <h2>New Task</h2>
+                <h2>Save Task</h2>
                 <form>
                     <div className="row">
                         <div className="col">

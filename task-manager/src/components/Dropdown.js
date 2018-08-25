@@ -20,7 +20,7 @@ class Dropdown extends Component {
 
     render() {
         return (
-            <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="ml-5">
+            <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="my-2">
                 <DropdownToggle caret>Filter Options</DropdownToggle>
                 <DropdownMenu>
                     <DropdownItem onClick={this.props.dateAsc}>Due Date Ascending</DropdownItem>
