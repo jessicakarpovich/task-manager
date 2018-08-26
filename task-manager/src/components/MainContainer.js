@@ -6,10 +6,7 @@ import MainList from './MainList';
 import Dropdown from './Dropdown';
 import '../main.css';
 
-
-//import { Route } from "react-roter-dom";
-
-
+// main container for task management
 class  MainContainer extends Component {
 
     constructor() {
@@ -19,6 +16,7 @@ class  MainContainer extends Component {
             taskList: [],
             activeKey: '0'
         }
+        // bind
         this.toggleForm = this.toggleForm.bind(this);
         this.addTask = this.addTask.bind(this);
         this.updateTask = this.updateTask.bind(this);
@@ -40,10 +38,7 @@ class  MainContainer extends Component {
         }
         
     }
-
-    //handleCertainChange = (value) => {}
-    // set state to new value
-
+    // toggle add task form
     toggleForm() {
         this.setState({showForm: !this.state.showForm});
     }
@@ -57,16 +52,17 @@ class  MainContainer extends Component {
             desc: task.desc, 
             added_date: task.added_date,
             start_date: task.start_date,
-            due_date: task.due_date
+            due_date: task.due_date,
+            subList: []
         });
         this.setState({ taskList: this.state.taskList });
         localStorage.setItem('taskList', JSON.stringify(this.state.taskList));
     }
     
     // update task by id
-    updateTask(task, id) {
+    updateTask(value) {
         let list = this.state.taskList;
-        list.splice(id, 1, task);
+        list[value.id] = value.task;
         this.setState({ taskList: list});
         localStorage.setItem('taskList', JSON.stringify(list));
     }
@@ -173,7 +169,7 @@ class  MainContainer extends Component {
     render() {
         // map list values
         let tasks = this.state.taskList.map((value, key) => {
-            return <MainList value={value} key={key} id={key} del={() => this.deleteTask(key)} updateTask={(e) => this.updateTask(e)}/>
+            return <MainList value={value} key={key} id={key} del={() => this.deleteTask(key)} updateTask={(e) => this.updateTask(e)} lid={key}/>
         })
         
         return (
@@ -186,8 +182,9 @@ class  MainContainer extends Component {
                             <button type="button" className="btn btn-primary my-2" onClick={this.toggleForm}>Add a New Task</button>
                             <Dropdown dateAsc={this.filterDateAsc} dateDesc={this.filterDateDesc} nameAsc={this.filterNameAsc} nameDesc={this.filterNameDesc} prioAsc={this.filterPrioAsc} prioDesc={this.filterPrioDesc} />
                         </div>}
-
-                        {this.state.showForm && <TaskForm addTask={this.addTask} toggleForm={this.toggleForm}/>}
+                        <div className="d-flex justify-content-center">
+                            {this.state.showForm && <TaskForm addTask={this.addTask} toggleForm={this.toggleForm}/>}
+                        </div>  
                     </div>
                     <div className="scrollingContent">{tasks}</div>
                 </div>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
-// form for task, can have sub-tasks
-class TaskForm extends Component {
+class SubTaskForm extends Component {
     
     constructor(props) {
         super(props);
@@ -10,12 +9,17 @@ class TaskForm extends Component {
             hours: 0,
             priority: 0,
             desc: '',
-            start_date: '',
-            due_date: '',
             loadedProps: false
         }
         
         this.addTask = this.addTask.bind(this);
+        /*
+        if (props.values !== undefined) {
+            this.state.name = this.props.values.name;
+            this.state.hours = this.props.values.hours;
+            this.state.priority = this.props.values.priority;
+            this.state.desc = this.props.values.desc;
+        }*/
     }
     
     componentDidMount() {
@@ -26,13 +30,6 @@ class TaskForm extends Component {
             this.setState({hours: this.props.values.hours});
             this.setState({priority: this.props.values.priority});
             this.setState({desc: this.props.values.desc});
-            this.setState({start_date: this.props.values.start_date});
-            this.setState({due_date: this.props.values.due_date});
-            if (this.props.values.subList) {
-                this.setState({subList: this.props.values.subList});
-            } else {
-                this.setState({subList: []});
-            }
             this.setState({loadedProps: true});
         }
     }
@@ -49,42 +46,34 @@ class TaskForm extends Component {
     addTask(e) {
         e.preventDefault();
         
-        let added_date = new Date();
-        // get it in yyyy/mm/dd format
-        let temp = added_date.toISOString().slice(0, 10);
-        
         // validate user input
         if (this.state.name === undefined || this.state.name.trim() === "") {
-            alert("Please do not leave the task name blank.")
+            alert("Please do not leave the sub-task name blank.")
             return false;
         } 
         if (this.state.hours < 0 || isNaN(this.state.hours)) {
-            alert("Please enter the number of hours this task will take.")
+            alert("Please enter the number of hours this sub-task will take.")
             return false;
         }
         
         // keep description, start date and due date optional
-        // build task object
+        
         let task = {
             name: this.state.name, 
             hours: parseInt(this.state.hours, 10), 
             priority: parseInt(this.state.priority, 10),
-            desc: this.state.desc, 
-            added_date: temp,
-            start_date: this.state.start_date, 
-            due_date: this.state.due_date,
-            subList: this.state.subList
+            desc: this.state.desc
         };
         // send validated task to parent
-        this.props.addTask(task);
+        this.props.addSubTask(task);
         // toggle form
-        this.props.toggleForm();
+        this.props.toggleSubForm();
     }
     
     render () {
         return (
             <div className="col-md-6 my-2">
-                <h2>Save Task</h2>
+                <h2>Save Sub-Task</h2>
                 <form>
                     <div className="row">
                         <div className="col">
@@ -106,18 +95,8 @@ class TaskForm extends Component {
                         <label htmlFor="desc" className="col-form-label">Description:</label>
                         <textarea className="form-control" id="desc" value={this.state.desc} onChange={(e) => this.handleInputChange(e)}></textarea>
                     </div>
-                    <div className="row">
-                        <div className="col">
-                            <label htmlFor="start_date" className="col-form-label">Start Date:</label>
-                            <input type="date" className="form-control" id="start_date" value={this.state.start_date} onChange={(e) => this.handleInputChange(e)}/>
-                        </div>
-                        <div className="col">
-                            <label htmlFor="due_date" className="col-form-label">Due Date:</label>
-                            <input type="date" className="form-control" id="due_date" value={this.state.due_date} onChange={(e) => this.handleInputChange(e)}/>
-                        </div>
-                    </div>
                     <div className="form-group d-flex justify-content-between">
-                        <button className="btn btn-danger my-2" onClick={this.props.toggleForm}>Cancel</button>
+                        <button className="btn btn-danger my-2" onClick={this.props.toggleSubForm}>Cancel</button>
                         <button className="btn btn-primary my-2" onClick={this.addTask}>Save</button>
                     </div>
                 </form>
@@ -127,4 +106,4 @@ class TaskForm extends Component {
     }
 }
 
-export default TaskForm;
+export default SubTaskForm;
