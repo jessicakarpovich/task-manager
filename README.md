@@ -1,5 +1,9 @@
 ## Introduction
-This is a task manager tool created using React.js and Bootstrap.
+This is a task manager tool created using React.js, Bootstrap 4, and reactstrap.
 
 ## Current Functionality
-It currently allows you to add a new task and saves it into local storage. It then checks for data in local storage, and if there is a task list, it displays it along with a filter and the ability to update and delete any item.
+Create, Read, Update, and Delete Tasks and Sub-Tasks. For now, everything is stored in local storage. This means data persists unless local storage is cleared, or user switches to a different browser.
+
+There is also a task filter with options to filter by due date, name, and priority.
+
+General styling is done using Bootstrap, and reactstrap is used for the collapse components.
